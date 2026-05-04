@@ -45,6 +45,15 @@ app.get('/api/newspapers/:id', (req, res) => {
 // Create newspaper
 app.post('/api/newspapers', (req, res) => {
   const { brand, mainHeading, mainContent, subHeadings, subSubHeadings } = req.body as Omit<Newspaper, 'id' | 'createdAt'>;
+  if (
+    typeof brand !== 'string' || !brand.trim() ||
+    typeof mainHeading !== 'string' || !mainHeading.trim() ||
+    typeof mainContent !== 'string' || !mainContent.trim() ||
+    !Array.isArray(subHeadings) || subHeadings.length !== 2 ||
+    !Array.isArray(subSubHeadings) || subSubHeadings.length !== 3
+  ) {
+    return res.status(400).json({ error: 'Invalid or missing required fields' });
+  }
   const newspaper: Newspaper = {
     id: uuidv4(),
     brand,
@@ -62,7 +71,15 @@ app.post('/api/newspapers', (req, res) => {
 app.put('/api/newspapers/:id', (req, res) => {
   const idx = newspapers.findIndex((n) => n.id === req.params.id);
   if (idx === -1) return res.status(404).json({ error: 'Not found' });
-  newspapers[idx] = { ...newspapers[idx], ...req.body, id: req.params.id };
+  const { brand, mainHeading, mainContent, subHeadings, subSubHeadings } = req.body as Partial<Omit<Newspaper, 'id' | 'createdAt'>>;
+  newspapers[idx] = {
+    ...newspapers[idx],
+    ...(brand !== undefined && { brand }),
+    ...(mainHeading !== undefined && { mainHeading }),
+    ...(mainContent !== undefined && { mainContent }),
+    ...(subHeadings !== undefined && { subHeadings }),
+    ...(subSubHeadings !== undefined && { subSubHeadings }),
+  };
   res.json(newspapers[idx]);
 });
 
