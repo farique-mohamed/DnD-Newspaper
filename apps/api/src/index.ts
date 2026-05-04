@@ -45,14 +45,20 @@ app.get('/api/newspapers/:id', (req, res) => {
 // Create newspaper
 app.post('/api/newspapers', (req, res) => {
   const { brand, mainHeading, mainContent, subHeadings, subSubHeadings } = req.body as Omit<Newspaper, 'id' | 'createdAt'>;
-  if (
-    typeof brand !== 'string' || !brand.trim() ||
-    typeof mainHeading !== 'string' || !mainHeading.trim() ||
-    typeof mainContent !== 'string' || !mainContent.trim() ||
-    !Array.isArray(subHeadings) || subHeadings.length !== 2 ||
-    !Array.isArray(subSubHeadings) || subSubHeadings.length !== 3
-  ) {
-    return res.status(400).json({ error: 'Invalid or missing required fields' });
+  if (typeof brand !== 'string' || !brand.trim()) {
+    return res.status(400).json({ error: 'Missing or invalid field: brand' });
+  }
+  if (typeof mainHeading !== 'string' || !mainHeading.trim()) {
+    return res.status(400).json({ error: 'Missing or invalid field: mainHeading' });
+  }
+  if (typeof mainContent !== 'string' || !mainContent.trim()) {
+    return res.status(400).json({ error: 'Missing or invalid field: mainContent' });
+  }
+  if (!Array.isArray(subHeadings) || subHeadings.length !== 2) {
+    return res.status(400).json({ error: 'subHeadings must be an array of exactly 2 items' });
+  }
+  if (!Array.isArray(subSubHeadings) || subSubHeadings.length !== 3) {
+    return res.status(400).json({ error: 'subSubHeadings must be an array of exactly 3 items' });
   }
   const newspaper: Newspaper = {
     id: uuidv4(),
