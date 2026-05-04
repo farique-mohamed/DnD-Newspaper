@@ -78,6 +78,21 @@ app.put('/api/newspapers/:id', (req, res) => {
   const idx = newspapers.findIndex((n) => n.id === req.params.id);
   if (idx === -1) return res.status(404).json({ error: 'Not found' });
   const { brand, mainHeading, mainContent, subHeadings, subSubHeadings } = req.body as Partial<Omit<Newspaper, 'id' | 'createdAt'>>;
+  if (brand !== undefined && (typeof brand !== 'string' || !brand.trim())) {
+    return res.status(400).json({ error: 'Missing or invalid field: brand' });
+  }
+  if (mainHeading !== undefined && (typeof mainHeading !== 'string' || !mainHeading.trim())) {
+    return res.status(400).json({ error: 'Missing or invalid field: mainHeading' });
+  }
+  if (mainContent !== undefined && (typeof mainContent !== 'string' || !mainContent.trim())) {
+    return res.status(400).json({ error: 'Missing or invalid field: mainContent' });
+  }
+  if (subHeadings !== undefined && (!Array.isArray(subHeadings) || subHeadings.length !== 2)) {
+    return res.status(400).json({ error: 'subHeadings must be an array of exactly 2 items' });
+  }
+  if (subSubHeadings !== undefined && (!Array.isArray(subSubHeadings) || subSubHeadings.length !== 3)) {
+    return res.status(400).json({ error: 'subSubHeadings must be an array of exactly 3 items' });
+  }
   newspapers[idx] = {
     ...newspapers[idx],
     ...(brand !== undefined && { brand }),

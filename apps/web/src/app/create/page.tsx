@@ -37,23 +37,25 @@ export default function CreatePage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const setField = (path: string, value: string) => {
+  const setTopField = (key: 'brand' | 'mainHeading' | 'mainContent', value: string) => {
+    setForm((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const setSubHeading = (i: 0 | 1, key: 'title' | 'content', value: string) => {
     setForm((prev) => {
-      const next = structuredClone(prev) as unknown as Record<string, unknown>;
-      const parts = path.split('.');
-      let obj = next;
-      for (let i = 0; i < parts.length - 1; i++) {
-        const key = parts[i];
-        const idx = Number(parts[i + 1]);
-        if (!isNaN(idx)) {
-          obj = (obj[key] as Record<string, unknown>[])[idx] as Record<string, unknown>;
-          i++;
-        } else {
-          obj = obj[key] as Record<string, unknown>;
-        }
-      }
-      obj[parts[parts.length - 1]] = value;
-      return next as unknown as FormData;
+      const subHeadings = prev.subHeadings.map((h, idx) =>
+        idx === i ? { ...h, [key]: value } : h,
+      ) as FormData['subHeadings'];
+      return { ...prev, subHeadings };
+    });
+  };
+
+  const setSubSubHeading = (i: 0 | 1 | 2, key: 'title' | 'content', value: string) => {
+    setForm((prev) => {
+      const subSubHeadings = prev.subSubHeadings.map((h, idx) =>
+        idx === i ? { ...h, [key]: value } : h,
+      ) as FormData['subSubHeadings'];
+      return { ...prev, subSubHeadings };
     });
   };
 
@@ -89,7 +91,7 @@ export default function CreatePage() {
             <input
               className={styles.input}
               value={form.brand}
-              onChange={(e) => setField('brand', e.target.value)}
+              onChange={(e) => setTopField('brand', e.target.value)}
               placeholder="e.g. The Tavern Times"
               required
             />
@@ -104,7 +106,7 @@ export default function CreatePage() {
             <input
               className={styles.input}
               value={form.mainHeading}
-              onChange={(e) => setField('mainHeading', e.target.value)}
+              onChange={(e) => setTopField('mainHeading', e.target.value)}
               placeholder="Dragon Spotted Over Neverwinter!"
               required
             />
@@ -114,7 +116,7 @@ export default function CreatePage() {
             <textarea
               className={styles.textarea}
               value={form.mainContent}
-              onChange={(e) => setField('mainContent', e.target.value)}
+              onChange={(e) => setTopField('mainContent', e.target.value)}
               placeholder="Write the full story here..."
               rows={8}
               required
@@ -131,7 +133,7 @@ export default function CreatePage() {
               <input
                 className={styles.input}
                 value={form.subHeadings[i].title}
-                onChange={(e) => setField(`subHeadings.${i}.title`, e.target.value)}
+                onChange={(e) => setSubHeading(i, 'title', e.target.value)}
                 placeholder={`Sub-heading ${i + 1} title`}
                 required
               />
@@ -141,7 +143,7 @@ export default function CreatePage() {
               <textarea
                 className={styles.textarea}
                 value={form.subHeadings[i].content}
-                onChange={(e) => setField(`subHeadings.${i}.content`, e.target.value)}
+                onChange={(e) => setSubHeading(i, 'content', e.target.value)}
                 placeholder="Article content..."
                 rows={4}
                 required
@@ -159,7 +161,7 @@ export default function CreatePage() {
               <input
                 className={styles.input}
                 value={form.subSubHeadings[i].title}
-                onChange={(e) => setField(`subSubHeadings.${i}.title`, e.target.value)}
+                onChange={(e) => setSubSubHeading(i, 'title', e.target.value)}
                 placeholder={`Sub-sub heading ${i + 1} title`}
                 required
               />
@@ -169,7 +171,7 @@ export default function CreatePage() {
               <textarea
                 className={styles.textarea}
                 value={form.subSubHeadings[i].content}
-                onChange={(e) => setField(`subSubHeadings.${i}.content`, e.target.value)}
+                onChange={(e) => setSubSubHeading(i, 'content', e.target.value)}
                 placeholder="Brief article content..."
                 rows={2}
                 required
