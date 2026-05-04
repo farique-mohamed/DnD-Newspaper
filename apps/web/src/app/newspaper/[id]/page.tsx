@@ -71,7 +71,7 @@ export default async function NewspaperPage({ params }: { params: { id: string }
           {/* Top 2/3 – Sub-heading articles */}
           <div className={styles.subArticles}>
             {newspaper.subHeadings.map((sub, i) => (
-              <article key={i} className={styles.subArticle}>
+              <article key={sub.id ?? i} className={styles.subArticle}>
                 <h3 className={styles.subHeading}>{sub.title}</h3>
                 <div className={styles.subRule} />
                 <p className={styles.subBody}>{sub.content}</p>
@@ -82,7 +82,7 @@ export default async function NewspaperPage({ params }: { params: { id: string }
           {/* Bottom 1/3 – Sub-sub strips */}
           <div className={styles.stripRow}>
             {newspaper.subSubHeadings.map((strip, i) => (
-              <article key={i} className={styles.strip}>
+              <article key={strip.id ?? i} className={styles.strip}>
                 <h4 className={styles.stripHeading}>{strip.title}</h4>
                 <div className={styles.stripRule} />
                 <p className={styles.stripBody}>{strip.content}</p>

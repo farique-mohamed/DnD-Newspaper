@@ -42,11 +42,12 @@ app.get('/api/newspapers/:id', (req, res) => {
   res.json(paper);
 });
 
-/** Validates that an item has non-empty 'title' and 'content' string fields. */
-function isValidArticleItem(item: unknown): item is { title: string; content: string } {
+/** Validates that an item has non-empty 'title' and 'content' string fields. Allows an optional 'id' string. */
+function isValidArticleItem(item: unknown): item is { id?: string; title: string; content: string } {
   if (!item || typeof item !== 'object') return false;
-  const { title, content } = item as Record<string, unknown>;
-  return typeof title === 'string' && title.trim().length > 0 &&
+  const { id, title, content } = item as Record<string, unknown>;
+  return (id === undefined || typeof id === 'string') &&
+         typeof title === 'string' && title.trim().length > 0 &&
          typeof content === 'string' && content.trim().length > 0;
 }
 
