@@ -1,0 +1,75 @@
+.home {
+  max-width: 800px;
+  margin: 4rem auto;
+  padding: 2rem;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  font-family: var(--font-serif);
+}
+
+.siteTitle {
+  font-size: 2.4rem;
+  text-align: center;
+  margin-bottom: 0.5rem;
+  color: var(--ink);
+  border-bottom: 3px double var(--ink);
+  padding-bottom: 0.5rem;
+}
+
+.subtitle {
+  text-align: center;
+  font-style: italic;
+  color: #555;
+  margin-bottom: 2rem;
+}
+
+.createBtn {
+  display: block;
+  text-align: center;
+  background: var(--accent);
+  color: #fff;
+  padding: 0.75rem 2rem;
+  text-decoration: none;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  letter-spacing: 0.05em;
+  border: none;
+  cursor: pointer;
+  margin-bottom: 2.5rem;
+}
+
+.createBtn:hover {
+  opacity: 0.85;
+}
+
+.list h2 {
+  font-size: 1.3rem;
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 1rem;
+  padding-bottom: 0.4rem;
+}
+
+.list ul {
+  list-style: none;
+}
+
+.list li {
+  border-bottom: 1px dotted var(--rule);
+  padding: 0.6rem 0;
+}
+
+.list li a {
+  display: flex;
+  justify-content: space-between;
+  color: var(--ink);
+  text-decoration: none;
+}
+
+.list li a:hover {
+  color: var(--accent);
+}
+
+.date {
+  font-size: 0.85rem;
+  color: #888;
+}

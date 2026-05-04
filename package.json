@@ -1,0 +1,14 @@
+{
+  "name": "dnd-newspaper",
+  "private": true,
+  "packageManager": "npm@10.8.2",
+  "workspaces": ["apps/*"],
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "lint": "turbo lint"
+  },
+  "devDependencies": {
+    "turbo": "^2.0.0"
+  }
+}

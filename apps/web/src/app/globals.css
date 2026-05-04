@@ -1,0 +1,33 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --ink: #1a1a1a;
+  --paper: #f5f0e8;
+  --rule: #888;
+  --accent: #8b0000;
+  --font-serif: Georgia, 'Times New Roman', Times, serif;
+  --font-sans: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+html,
+body {
+  background: #ccc;
+  font-family: var(--font-serif);
+  color: var(--ink);
+}
+
+/* ── Utility ─────────────────────────────────── */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
