@@ -34,8 +34,9 @@ async function getNewspaper(id: string): Promise<Newspaper | null> {
   }
 }
 
-export default async function NewspaperPage({ params }: { params: { id: string } }) {
-  const newspaper = await getNewspaper(params.id);
+export default async function NewspaperPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const newspaper = await getNewspaper(id);
   if (!newspaper) notFound();
 
   return (
