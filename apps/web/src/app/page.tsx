@@ -1,7 +1,10 @@
 import Link from 'next/link';
 import styles from './page.module.css';
+import type { Newspaper } from '@/lib/types';
 
-async function getNewspapers() {
+type NewspaperRow = Pick<Newspaper, 'id' | 'brand' | 'mainHeading' | 'createdAt' | 'issueDate'>;
+
+async function getNewspapers(): Promise<NewspaperRow[]> {
   try {
     const res = await fetch('http://localhost:4000/api/newspapers', { cache: 'no-store' });
     if (!res.ok) return [];
@@ -26,11 +29,18 @@ export default async function HomePage() {
         <section className={styles.list}>
           <h2>Your Newspapers</h2>
           <ul>
-            {newspapers.map((n: { id: string; brand: string; mainHeading: string; createdAt: string }) => (
-              <li key={n.id}>
-                <Link href={`/newspaper/${n.id}`}>
-                  <strong>{n.brand}</strong> — {n.mainHeading}
-                  <span className={styles.date}>{new Date(n.createdAt).toLocaleDateString()}</span>
+            {newspapers.map((n) => (
+              <li key={n.id} className={styles.row}>
+                <Link href={`/newspaper/${n.id}`} className={styles.rowLink}>
+                  <span>
+                    <strong>{n.brand}</strong> — {n.mainHeading}
+                  </span>
+                  <span className={styles.date}>
+                    {n.issueDate || (n.createdAt ? new Date(n.createdAt).toLocaleDateString() : '')}
+                  </span>
+                </Link>
+                <Link href={`/newspaper/${n.id}/edit`} className={styles.editLink}>
+                  ✎ Edit
                 </Link>
               </li>
             ))}
