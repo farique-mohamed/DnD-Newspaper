@@ -1,24 +1,45 @@
+'use client';
+
 import Link from 'next/link';
-import { notFound } from 'next/navigation';
+import { useParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import styles from './newspaper.module.css';
 import NewspaperLayout from './NewspaperLayout';
 import ExportButtons from './ExportButtons';
+import { getNewspaper } from '@/lib/store';
 import type { Newspaper } from '@/lib/types';
 
-async function getNewspaper(id: string): Promise<Newspaper | null> {
-  try {
-    const res = await fetch(`http://localhost:4000/api/newspapers/${id}`, { cache: 'no-store' });
-    if (!res.ok) return null;
-    return res.json();
-  } catch {
-    return null;
-  }
-}
+export default function NewspaperPage() {
+  const params = useParams<{ id: string }>();
+  const id = params.id;
+  const [newspaper, setNewspaper] = useState<Newspaper | null>(null);
+  // 'loading' until the client reads localStorage; then 'ready' or 'missing'.
+  const [status, setStatus] = useState<'loading' | 'ready' | 'missing'>('loading');
 
-export default async function NewspaperPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
-  const newspaper = await getNewspaper(id);
-  if (!newspaper) notFound();
+  useEffect(() => {
+    const found = getNewspaper(id);
+    setNewspaper(found);
+    setStatus(found ? 'ready' : 'missing');
+  }, [id]);
+
+  if (status === 'loading') {
+    return (
+      <main style={{ padding: '2rem', textAlign: 'center' }}>
+        <p>Loading…</p>
+      </main>
+    );
+  }
+
+  if (status === 'missing' || !newspaper) {
+    return (
+      <main style={{ padding: '2rem', textAlign: 'center' }}>
+        <p>Newspaper not found.</p>
+        <Link href="/" className={styles.backLink}>
+          ← Back to Newspapers
+        </Link>
+      </main>
+    );
+  }
 
   const orientation = newspaper.orientation ?? 'landscape';
   // Injected per-paper so the PDF uses this newspaper's own orientation on a

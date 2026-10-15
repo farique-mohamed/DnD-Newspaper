@@ -13,7 +13,7 @@ import {
 import type { Newspaper, ArticleItem } from './types';
 
 export interface ArticleForm {
-  id?: string; // preserved when editing so the API updates the item in place
+  id?: string; // preserved when editing so the store updates the item in place
   title: string;
   content: string;
 }
@@ -104,9 +104,9 @@ function inferVariant(subLen: number, subSubLen: number): VariantId {
   return LAYOUTS.find((l) => l.subCount === subLen && l.subSubCount === subSubLen)?.id ?? DEFAULT_VARIANT;
 }
 
-// Map an API newspaper into editable form state. Preserves server ids, fills
+// Map a stored newspaper into editable form state. Preserves item ids, fills
 // missing (older) fields with blanks, and infers the variant from array
-// lengths when the API hasn't stored one.
+// lengths when a stored record predates the variant field.
 export function fromNewspaper(n: Newspaper): NewspaperFormData {
   const variant = n.variant ?? inferVariant(n.subHeadings?.length ?? 0, n.subSubHeadings?.length ?? 0);
   const layout = getLayout(variant);

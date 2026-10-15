@@ -14,9 +14,9 @@ import {
 import LayoutPicker from './LayoutPicker';
 import ContentForm from './ContentForm';
 import { CAP_MODE } from './LimitedField';
+import { createNewspaper, updateNewspaper } from '@/lib/store';
 import styles from './wizard.module.css';
 
-const API = 'http://localhost:4000/api/newspapers';
 const MAX_ITEMS = 3;
 
 type Group = 'subHeadings' | 'subSubHeadings';
@@ -98,18 +98,12 @@ export default function NewspaperWizard({ mode, id, initialData }: NewspaperWiza
     setLoading(true);
     setError('');
     try {
-      const url = mode === 'create' ? API : `${API}/${id}`;
-      const res = await fetch(url, {
-        method: mode === 'create' ? 'POST' : 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(buildPayload(form)),
-      });
-      if (!res.ok) throw new Error('Failed to save newspaper');
-      const data = await res.json();
-      router.push(`/newspaper/${mode === 'create' ? data.id : id}`);
+      const payload = buildPayload(form);
+      const saved =
+        mode === 'create' ? createNewspaper(payload) : updateNewspaper(id as string, payload);
+      router.push(`/newspaper/${saved.id}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Unknown error');
-    } finally {
       setLoading(false);
     }
   };
