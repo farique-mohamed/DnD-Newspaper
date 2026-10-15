@@ -1,8 +1,9 @@
 // Single source of truth for the newspaper layout variants and their
 // per-region character limits. Consumed by the create/edit wizard (field
 // maxLength + counters), the layout picker/preview, and (indirectly) the
-// renderer. The API keeps only a minimal variant -> [subCount, subSubCount]
-// map for validation; the precise limits below live ONLY here.
+// renderer. The store (./store.ts) keeps only a minimal variant ->
+// [subCount, subSubCount] map for validation; the precise limits below live
+// ONLY here.
 
 export type VariantId = 'a' | 'b' | 'c' | 'd' | 'e' | 'f';
 

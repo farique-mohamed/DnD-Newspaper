@@ -1,6 +1,6 @@
-// Canonical web-side Newspaper types. The API (apps/api/src/index.ts) owns the
-// wire contract; this is the single web copy — the create, edit, view, and home
-// pages all import from here instead of redefining the shape.
+// Canonical Newspaper types. These describe what the client store (./store.ts)
+// persists to localStorage; the create, edit, view, and home pages all import
+// from here instead of redefining the shape.
 
 import type { VariantId, Orientation } from './layouts';
 

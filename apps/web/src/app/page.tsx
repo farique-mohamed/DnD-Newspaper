@@ -1,21 +1,21 @@
+'use client';
+
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import styles from './page.module.css';
+import { listNewspapers } from '@/lib/store';
 import type { Newspaper } from '@/lib/types';
 
 type NewspaperRow = Pick<Newspaper, 'id' | 'brand' | 'mainHeading' | 'createdAt' | 'issueDate'>;
 
-async function getNewspapers(): Promise<NewspaperRow[]> {
-  try {
-    const res = await fetch('http://localhost:4000/api/newspapers', { cache: 'no-store' });
-    if (!res.ok) return [];
-    return res.json();
-  } catch {
-    return [];
-  }
-}
+export default function HomePage() {
+  // Read on the client only — localStorage isn't available during SSR, so the
+  // first paint shows an empty list and the effect fills it after hydration.
+  const [newspapers, setNewspapers] = useState<NewspaperRow[]>([]);
 
-export default async function HomePage() {
-  const newspapers = await getNewspapers();
+  useEffect(() => {
+    setNewspapers(listNewspapers());
+  }, []);
 
   return (
     <main className={styles.home}>
